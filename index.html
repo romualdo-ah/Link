@@ -61,19 +61,24 @@
       }
       a.lighting {
         /* animation: lighting 1s infinite linear; */
-        animation: 1s infinite lighting linear;
+        animation: .3s infinite lighting linear;
         color: #000;
       }
 
       @keyframes lighting {
         0% {
           transform: scale(1, 1);
+          box-shadow: #9b15ea 0px 0px 0px;
         }
         50% {
           transform: scale(1.01, 1.06);
+          box-shadow: #9b15ea 0px 0px 10px;
+
         }
         100% {
           transform: scale(1, 1);
+          box-shadow: #9b15ea 0px 0px 0px;
+
         }
       }
 
