@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
+
     <style>
       :root {
         --logo-size: 120px;
@@ -23,6 +24,7 @@
       }
       body {
         height: 100vh;
+
         background: #9b15ea;
 
         background-size: 400%;
@@ -55,8 +57,10 @@
         transition: all 0.1s;
         font-weight: 800;
         text-shadow: #000 1px 1px 22px;
+        /* color: #f03; */
       }
       a.lighting {
+        /* animation: lighting 1s infinite linear; */
         animation: 1s infinite lighting linear;
         color: #000;
       }
@@ -116,6 +120,7 @@
         border-radius: 50%;
         animation: 0.8s ease-in-out 0s 1 zoomIn;
       }
+      /* background: url("https://instagram.frao1-1.fna.fbcdn.net/v/t51.2885-19/s320x320/117020264_1161342477575756_934694815860363241_n.jpg?_nc_ht=instagram.frao1-1.fna.fbcdn.net&_nc_ohc=0go-MfTQHNwAX-jJVwi&tp=1&oh=85efee97945d056096504e40d27b8a5f&oe=5FF4E125"); */
 
       @keyframes zoomIn {
         0% {
@@ -176,8 +181,7 @@
   </head>
   <body>
     <div class="container">
-      <main>
-      </main>
+      <main></main>
     </div>
     <script>
       const links_url = "https://sheetdb.io/api/v1/50oqpz95fbm2o";
@@ -197,9 +201,10 @@
           (element) => element.type === "background"
         )[0];
         console.log(background);
-        
+
         const body = document.querySelector("body");
-        body.style.background = `url(${background.link })`|| background.text||"#9b15ea";
+        body.style.background =
+          `url(${background.link})` || background.text || "#9b15ea";
 
         const logo_element = document.createElement("a");
         logo_element.classList.add("logo");
