@@ -250,6 +250,13 @@
         const logo = data.filter((element) => element.type === "logo")[0];
         const account = data.filter((element) => element.type === "profile")[0];
         const buttons = data.filter((element) => element.type === "button");
+        const background = data.filter(
+          (element) => element.type === "background"
+        )[0];
+        console.log(background);
+        
+        const body = document.querySelector("body");
+        body.style.background = `url(${background.link })`|| background.text||"#9b15ea";
 
         const logo_element = document.createElement("a");
         logo_element.classList.add("logo");
