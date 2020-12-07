@@ -14,6 +14,8 @@
     <style>
       :root {
         --logo-size: 120px;
+        --logo-initial-size: 20px;
+        --logo-zoom-size: 123px;
       }
       * {
         margin: 0;
@@ -21,16 +23,19 @@
         box-sizing: border-box;
         font-family: "Quicksand", sans-serif;
         color: #333;
+        -webkit-font-smoothing: antialiased;
       }
       body {
         height: 100vh;
+        background: hsla(187, 98%, 51%, 0.986);
+      }
 
-        background: #9b15ea;
-
+      body.loaded {
         background-size: 400%;
         animation: logo-animation 60s infinite alternate,
           loading-background ease-in-out 0.6s;
       }
+
       @keyframes loading-background {
         from {
           opacity: 0;
@@ -39,6 +44,7 @@
           opacity: 1;
         }
       }
+
       main {
         display: flex;
         flex-direction: column;
@@ -51,27 +57,32 @@
       a {
         text-decoration: none;
       }
+      .channel:active {
+        color: #9b15ea;
+      }
 
       .channel:hover {
         transform: scale(1.01);
         transition: all 0.1s;
+        color: #9b15ea;
         font-weight: 800;
-        text-shadow: #000 1px 1px 22px;
+        /* text-shadow: #9b15ea 1px 5px 22px; */
       }
       a.lighting {
         animation: 1.3s infinite lighting linear;
-        color: #000;
+        color: #9b15ea;
+        font-weight: 600;
       }
 
       @keyframes lighting {
         0% {
-          box-shadow: #9b15ea 0px 0px 0px;
+          box-shadow: #9b15ea 0px 0px 3px;
         }
         50% {
           box-shadow: #9b15ea 0px 0px 10px;
         }
         100% {
-          box-shadow: #9b15ea 0px 0px 0px;
+          box-shadow: #9b15ea 0px 0px 3px;
         }
       }
 
@@ -81,7 +92,7 @@
         cursor: pointer;
         border-radius: 25px;
 
-        padding: 10px 20px;
+        padding: 12px 20px;
         margin: 5px;
 
         font-weight: 500;
@@ -116,22 +127,51 @@
         border: solid 2px transparent;
         /* !importanté */
         border-radius: 50%;
-        animation: 0.8s ease-in-out 0s 1 zoomIn;
+        transition: width 0.5s, height 0.5s;
       }
-      /* background: url("https://instagram.frao1-1.fna.fbcdn.net/v/t51.2885-19/s320x320/117020264_1161342477575756_934694815860363241_n.jpg?_nc_ht=instagram.frao1-1.fna.fbcdn.net&_nc_ohc=0go-MfTQHNwAX-jJVwi&tp=1&oh=85efee97945d056096504e40d27b8a5f&oe=5FF4E125"); */
 
+      .initial {
+        width: 1px;
+        height: 1px;
+      }
+
+      .initial.logo {
+        width: var(--logo-initial-size);
+        height: var(--logo-initial-size);
+        animation: ease-in-out 3s round-animation infinite;
+
+        background: #8d04dd;
+        transform: 0.8s ease-in-out 0s 1 zoomIn;
+      }
       @keyframes zoomIn {
         0% {
-          width: 70px;
-          height: 70px;
+          width: var(--logo-initial-size);
+          height: var(--logo-initial-size);
+          transform: translateY(25px);
         }
         100% {
           width: var(--logo-size);
           height: var(--logo-size);
+          transform: translateY(0px);
         }
       }
 
-      .logo:before {
+      @keyframes round-animation {
+        0% {
+          transform: translateY(100px);
+        }
+        50% {
+          transform: translateY(0px);
+        }
+        100% {
+          transform: translateY(100px);
+        }
+      }
+      .logo.success {
+        animation: zoomIn 1s;
+      }
+
+      .logo.success:before {
         content: "";
         position: absolute;
         top: 0;
@@ -142,14 +182,18 @@
         margin: -2px;
         /* !importanté */
         border-radius: inherit;
+
         /* !importanté */
         background: linear-gradient(
           to right,
           #fed373,
+          /* #c4a25a, */
           #f15245,
           #d92e7f,
-          #9b36b7,
-          #515ecf
+          /* #9b15ea, */
+          #541479,
+          #000,
+          #000
         );
         background-size: 400%;
         animation: logo-animation 2s infinite alternate;
@@ -175,69 +219,90 @@
         box-sizing: content-box;
         height: 100%;
       }
+      #dev{
+        position:fixed;
+        bottom:10px;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <main></main>
+      <main>
+        <a href="" class="logo initial"></a>
+        
+      </main>
     </div>
     <script>
       const links_url = "https://sheetdb.io/api/v1/50oqpz95fbm2o";
 
       window.onload = async () => {
+        const logo_element = document.querySelector(".logo");
+
         fetch(links_url)
           .then((response) => response.json())
           .then((data) => load_data(data));
+
+        function load_data(data) {
+          const main = document.querySelector("main");
+
+          const logo = data.filter((element) => element.type === "logo")[0];
+          const account = data.filter(
+            (element) => element.type === "profile"
+          )[0];
+          const buttons = data.filter((element) => element.type === "button");
+          const background = data.filter(
+            (element) => element.type === "background"
+          )[0];
+          console.log(background);
+
+          const body = document.querySelector("body");
+          body.classList.add("loaded");
+
+          body.style.background =
+            `url(${background.link})` || background.text || "#9b15ea";
+
+          logo_element.setAttribute("href", account.link);
+          logo_element.setAttribute("target", "_blank");
+          logo_element.setAttribute("style", `background:url(${logo.link})`);
+          logo_element.style.backgroundSize = "contain";
+          logo_element.style.backgroundPositionX = "center";
+          logo_element.style.backgroundPositionX = "center";
+          logo_element.style.backgroundClip = "padding-box";
+
+          const account_element = document.createElement("a");
+          account_element.setAttribute("href", account.link);
+          account_element.setAttribute("target", "_blank");
+
+          const account_element_text = document.createElement("h3");
+          account_element_text.textContent = account.text;
+
+          account_element.appendChild(account_element_text);
+
+          // main.appendChild(logo_element);
+          main.appendChild(account_element);
+
+          buttons.map((button) => {
+            const channel = document.createElement("a");
+            channel.setAttribute("href", button.link);
+            channel.setAttribute("target", "_blank");
+
+            channel.classList.add("channel");
+            channel.textContent = button.text;
+
+            main.appendChild(channel);
+          });
+          logo_element.classList.add("success");
+          logo_element.classList.remove("initial");
+
+          document.querySelector(".channel").classList.add("lighting");
+          addDev()
+        }
       };
-      function load_data(data) {
-        const main = document.querySelector("main");
-
-        const logo = data.filter((element) => element.type === "logo")[0];
-        const account = data.filter((element) => element.type === "profile")[0];
-        const buttons = data.filter((element) => element.type === "button");
-        const background = data.filter(
-          (element) => element.type === "background"
-        )[0];
-        console.log(background);
-
-        const body = document.querySelector("body");
-        body.style.background =
-          `url(${background.link})` || background.text || "#9b15ea";
-
-        const logo_element = document.createElement("a");
-        logo_element.classList.add("logo");
-        logo_element.setAttribute("href", account.link);
-        logo_element.setAttribute("target", "_blank");
-        logo_element.style.background = `url(${logo.link})`;
-        logo_element.style.backgroundSize = "contain";
-        logo_element.style.backgroundPositionX = "center";
-        logo_element.style.backgroundPositionX = "center";
-        logo_element.style.backgroundClip = "padding-box";
-
-        // logo_element.textContent=logo.text;
-        const account_element = document.createElement("a");
-        account_element.setAttribute("href", account.link);
-        account_element.setAttribute("target", "_blank");
-
-        const account_element_text = document.createElement("h3");
-        account_element_text.textContent = account.text;
-
-        account_element.appendChild(account_element_text);
-
-        main.appendChild(logo_element);
-        main.appendChild(account_element);
-
-        buttons.map((button) => {
-          const channel = document.createElement("a");
-          channel.setAttribute("href", button.link);
-          channel.setAttribute("target", "_blank");
-
-          channel.classList.add("channel");
-          channel.textContent = button.text;
-
-          main.appendChild(channel);
-        });
-        document.querySelector(".channel").classList.add("lighting");
+      function addDev(){
+        const main=document.querySelector("main");
+        main.innerHTML+=`<a id="dev" href="https://www.instagram.com/romualdo_ah/" target="_blank">
+        contate o dev
+        </a>`
       }
     </script>
   </body>
