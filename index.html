@@ -41,14 +41,7 @@
           loading-background ease-in-out 0.6s;
       }
 
-      @keyframes loading-background {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
+      
 
       main {
         display: flex;
@@ -136,60 +129,32 @@
       .initial.logo {
         width: var(--logo-initial-size);
         height: var(--logo-initial-size);
-        animation: ease-in-out 3s round-animation infinite;
+        animation: ease-in-out 3s translate-vertical-animation infinite;
 
         background: #8d04dd;
         transform: 0.8s ease-in-out 0s 1 zoomIn;
       }
 
-      @keyframes zoomIn {
-        0% {
-          width: var(--logo-initial-size);
-          height: var(--logo-initial-size);
-          transform: translateY(25px);
-        }
-        100% {
-          width: var(--logo-size);
-          height: var(--logo-size);
-          transform: translateY(0px);
-        }
-      }
-
-      @keyframes logo-animation {
-        0% {
-          background-position: left;
-        }
-        100% {
-          background-position: right;
-        }
-      }
-
-      @keyframes round-animation {
-        0% {
-          transform: translateY(100px);
-        }
-        50% {
-          transform: translateY(0px);
-        }
-        100% {
-          transform: translateY(100px);
-        }
-      }
-
-      @keyframes lighting {
-        0% {
-          box-shadow: #9b15ea 0px 0px 3px;
-        }
-        50% {
-          box-shadow: #9b15ea 0px 0px 10px;
-        }
-        100% {
-          box-shadow: #9b15ea 0px 0px 3px;
-        }
-      }
-
+      
       .logo.success {
-        animation: zoomIn 1s,;
+        animation: zoomIn 1s,moving-background 1s;        
+      }
+      .logo.success:after{
+        background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+        opacity:0;
+        content:"";
+        z-index: 1;
+        width:inherit;
+        height:inherit;
+        
+        position: absolute;
+        top: -2px;
+        right: 0px;
+        bottom: 0px;
+        left: -1px;
+
+        border-radius: 50%;
+        animation: clean-logo-animation 1s 1s;
       }
 
       .logo.success:before {
@@ -238,6 +203,80 @@
       #dev>span{
         font-size: 14px;
       }
+       
+       @keyframes clean-logo-animation {
+        from {
+          opacity:1;
+        }
+        to {
+          opacity:0;
+        }
+       }
+
+      @keyframes moving-background{
+        0% {
+          background-position: left;
+        }
+        100% {
+          background-position: right;
+        }
+      }
+
+      @keyframes loading-background {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes zoomIn {
+        0% {
+          width: var(--logo-initial-size);
+          height: var(--logo-initial-size);
+          transform: translateY(25px);
+        }
+        100% {
+          width: var(--logo-size);
+          height: var(--logo-size);
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes logo-animation {
+        0% {
+          background-position: left;
+        }
+        100% {
+          background-position: right;
+        }
+      }
+
+      @keyframes translate-vertical-animation {
+        0% {
+          transform: translateY(100px);
+        }
+        50% {
+          transform: translateY(0px);
+        }
+        100% {
+          transform: translateY(100px);
+        }
+      }
+
+      @keyframes lighting {
+        0% {
+          box-shadow: #9b15ea 0px 0px 3px;
+        }
+        50% {
+          box-shadow: #9b15ea 0px 0px 10px;
+        }
+        100% {
+          box-shadow: #9b15ea 0px 0px 3px;
+        }
+      }
+
 
     </style>
   </head>
@@ -245,6 +284,7 @@
     <div class="container">
       <main>
         <a href="" class="logo initial">
+          <div class="loaded"></div>
         </a>
       </main>
     </div>
@@ -337,8 +377,11 @@
 
           main.appendChild(channel);
         });
-        logo_element.classList.add("success");
+
         logo_element.setAttribute("style", `background-image:url(${logo.link})`);
+        
+        logo_element.innerHTML+=""
+        logo_element.classList.add("success");
 
         logo_element.classList.remove("initial");
 
