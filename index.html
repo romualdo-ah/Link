@@ -103,12 +103,11 @@
 
       .channel .button_text {
         align-self: center;
-        /* margin-right: 50%; */
-        position:absolute;
-        /* justify-content:center; */
-        /* flex-grow: 10; */
+        position: absolute;
       }
-
+      .channel:not(.book) + .channel.book {
+        margin-top: 28px;
+      }
       .channel .highlight {
         align-self: center;
         line-height: 0px;
@@ -384,6 +383,8 @@
           channel.setAttribute("target", "_blank");
 
           channel.classList.add("channel");
+          button.highlight && channel.classList.add("book");
+
           const text = `
           <span class="button_text">${button.text}</span>${
             button.highlight ? "<span class='highlight'>📚</span>" : ""
