@@ -305,7 +305,14 @@
     <script>
       const links_url =
         "https://docs.google.com/spreadsheets/d/1v3xZ5MOMSoTJ27pHEM9KcxfiXkRE_Mu5i4BV3tUFL8o/pub?output=csv";
+      if(navigator.serviceWorker){
 
+        window.addEventListener("load",()=>{
+          navigator.serviceWorker.register("sw_cached_pages.js").then(reg=>console.log("ServiceWorker registered")
+          ).catch(err=>console.log("ServiceWorker error",err)
+          )
+        })
+      }
       window.onload = loaded();
       const logo_element = document.querySelector(".logo");
       const main = document.querySelector("main");
