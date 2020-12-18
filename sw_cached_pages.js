@@ -1,5 +1,5 @@
 const cacheName = "v1";
-const cacheAssets = ["index.html", "transparent_logo.png"];
+const cacheAssets = ["index.html", "transparent_logo.png","sw_cached_pages.js"];
 
 self.addEventListener("install", (e) => {
   console.log("ServiceWorker installed");
